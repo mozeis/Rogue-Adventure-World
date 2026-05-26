@@ -5,6 +5,9 @@
 [ext_resource type="TileSet" uid="uid://bdmyru5aeqfg6" path="res://ElvGames/Rogue Adventure/Tilesets/RA_Jungle.tres" id="3_3ushv"]
 [ext_resource type="PackedScene" uid="uid://iexg57nevmn8" path="res://entidades/player.tscn" id="4_1bvp3"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bvp3"]
+size = Vector2(271, 37)
+
 [node name="Main" type="Node" unique_id=756733694]
 
 [node name="Ground_Tiles" type="TileMap" parent="." unique_id=2139743736]
@@ -28,3 +31,9 @@ layer_0/tile_data = PackedInt32Array(720902, 1, 0, 262161, 1, 0, 262143, 1, 0, 5
 
 [node name="player" parent="." unique_id=312301283 instance=ExtResource("4_1bvp3")]
 position = Vector2(34, 15)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=312497029]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1545670398]
+position = Vector2(125, 162)
+shape = SubResource("RectangleShape2D_1bvp3")

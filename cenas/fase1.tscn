@@ -2,7 +2,16 @@
 
 [sub_resource type="TileSet" id="TileSet_gf4dm"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y2fdu"]
+size = Vector2(271, 37)
+
 [node name="fase1" type="Node2D" unique_id=7517828]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=355766428]
 tile_set = SubResource("TileSet_gf4dm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1264498916]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1520059937]
+position = Vector2(125, 162)
+shape = SubResource("RectangleShape2D_y2fdu")
