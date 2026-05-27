@@ -338,3 +338,7 @@ sprite_frames = SubResource("SpriteFrames_580ay")
 animation = &"anda"
 autoplay = "idle"
 frame_progress = 0.97103804
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=419469943]
+limit_left = 0
+limit_bottom = 200
