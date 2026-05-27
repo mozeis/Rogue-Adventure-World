@@ -1,9 +1,10 @@
 extends CharacterBody2D
 
+# Referência ao nó, que será carregado quando a cena iniciar
+@onready var animated_sprite = $AnimatedSprite2D
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -300.0
-
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -15,20 +16,20 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis("ui_left", "ui_right")
 	if direction:
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
+	# Lógica corrigida usando a referência 'animated_sprite'
 	if direction > 0:
-		AnimatedSprite2D.flip_h = false
-		AnimatedSprite2D.play("anda")
+		animated_sprite.flip_h = false
+		animated_sprite.play("anda")
 	elif direction < 0:
-		AnimatedSprite2D.flip_h = true
-		AnimatedSprite2D.play("anda")
+		animated_sprite.flip_h = true
+		animated_sprite.play("anda")
 	else:
-		AnimatedSprite2D.play("idle")
-		
+		animated_sprite.play("idle")
+		 
 	move_and_slide()
