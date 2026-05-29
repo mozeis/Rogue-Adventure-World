@@ -1,35 +1,46 @@
 extends CharacterBody2D
 
-# Referência ao nó, que será carregado quando a cena iniciar
-@onready var animated_sprite = $AnimatedSprite2D
+# Variáveis exportadas para configurar no Inspector
+@export var speed: float = 100.0
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -300.0
+# Referências aos nós
+@onready var animation = $AnimatedSprite2D 
+@onready var camera = $Camera2D
 
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+var can_die: bool = false
+var is_attacking: bool = false
 
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+func _physics_process(_delta: float) -> void:
+	# Se estiver morto ou atacando, bloqueia o movimento
+	if not can_die and not is_attacking:
+		move()
+		animate()
 	
-	# Lógica corrigida usando a referência 'animated_sprite'
-	if direction > 0:
-		animated_sprite.flip_h = false
-		animated_sprite.play("anda")
-	elif direction < 0:
-		animated_sprite.flip_h = true
-		animated_sprite.play("anda")
-	else:
-		animated_sprite.play("idle")
-		 
+	# O move_and_slide() no Godot 4 usa a variável 'velocity' automaticamente
 	move_and_slide()
+
+func move() -> void:
+	# Input.get_vector simplifica a captura das 4 direções em um único Vector2
+	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	velocity = direction * speed
+
+func animate() -> void:
+	# Lógica de ataque (prioridade sobre movimento)
+	if Input.is_action_just_pressed("ui_accept"):
+		is_attacking = true
+		animation.play("Attack")
+		return
+
+	# Lógica de animação de movimento
+	if velocity != Vector2.ZERO:
+		animation.play("corre")
+		animation.flip_h = velocity.x < 0
+	else:
+		animation.play("dle")
+
+# Sinal conectado do AnimatedSprite2D: animation_finished
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if animation.animation == "Attack":
+		is_attacking = false
+	elif animation.animation == "Death":
+		get_tree().reload_current_scene()
